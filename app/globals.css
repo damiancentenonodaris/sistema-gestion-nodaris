@@ -1,0 +1,117 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url("https://rsms.me/inter/inter.css");
+
+:root {
+  --bg: #f7f9fc;
+  --grid: rgba(15, 23, 42, 0.04);
+}
+
+.dark {
+  --bg: #0a1020;
+  --grid: rgba(148, 163, 184, 0.06);
+}
+
+@layer base {
+  html {
+    font-family: "Inter", system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    @apply bg-surface-page text-ink;
+    font-feature-settings: "cv11", "ss01", "ss03";
+  }
+
+  .dark body {
+    @apply bg-[#0a1020] text-slate-100;
+  }
+
+  ::selection {
+    background: rgba(37, 99, 235, 0.18);
+  }
+
+  /* Scrollbars finos y elegantes */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+    border-radius: 8px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+    background-clip: padding-box;
+    border: 2px solid transparent;
+  }
+  .dark ::-webkit-scrollbar-thumb {
+    background: #1e293b;
+    background-clip: padding-box;
+    border: 2px solid transparent;
+  }
+}
+
+@layer components {
+  /* Patrón nodal/constelación sutil para fondos */
+  .bg-nodal {
+    background-image:
+      radial-gradient(circle at 1px 1px, var(--grid) 1px, transparent 0);
+    background-size: 24px 24px;
+  }
+
+  .bg-grid-fade {
+    background-image:
+      linear-gradient(to right, var(--grid) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--grid) 1px, transparent 1px);
+    background-size: 32px 32px;
+    -webkit-mask-image: radial-gradient(ellipse at center, black 40%, transparent 75%);
+            mask-image: radial-gradient(ellipse at center, black 40%, transparent 75%);
+  }
+
+  /* Focus ring consistente */
+  .focus-ring {
+    @apply outline-none ring-0 focus-visible:ring-2 focus-visible:ring-brand-600/40 focus-visible:ring-offset-1 focus-visible:ring-offset-white transition;
+  }
+
+  /* Tarjeta base */
+  .card-base {
+    @apply rounded-2xl border border-surface-border bg-surface shadow-soft;
+  }
+  .dark .card-base {
+    @apply border-slate-800 bg-[#0f1729] shadow-none;
+  }
+
+  /* Texto secundario */
+  .text-muted {
+    @apply text-ink-subtle;
+  }
+  .dark .text-muted {
+    @apply text-slate-400;
+  }
+}
+
+/* Recharts overrides — ejes y tooltip más elegantes */
+.recharts-cartesian-axis-tick text {
+  fill: #94a3b8;
+  font-size: 11px;
+  font-weight: 500;
+}
+.recharts-cartesian-grid line {
+  stroke: #eef2f7;
+}
+.dark .recharts-cartesian-grid line {
+  stroke: #1e293b;
+}
+.recharts-tooltip-wrapper {
+  outline: none !important;
+}
