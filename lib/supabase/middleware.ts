@@ -1,10 +1,13 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
-const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL ?? "";
-const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? "";
-
 export async function updateSession(request: NextRequest) {
+  let SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
+  if (SUPABASE_URL && !SUPABASE_URL.startsWith("http")) {
+    SUPABASE_URL = `https://${SUPABASE_URL}`;
+  }
+  const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "";
+
   // Si las variables de entorno no están configuradas, pasar directo sin auth
   if (!SUPABASE_URL || !SUPABASE_KEY) {
     return NextResponse.next({ request });
