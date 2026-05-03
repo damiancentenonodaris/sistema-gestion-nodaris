@@ -22,19 +22,21 @@ const config: Config = {
           800: "#1E40AF",
           900: "#1E3A8A",
         },
+        // Tokens semánticos: definidos como CSS vars en globals.css
+        // y conmutados automáticamente por la clase `.dark` en <html>.
         ink: {
-          DEFAULT: "#0F172A",
-          soft: "#1E293B",
-          muted: "#475569",
-          subtle: "#64748B",
-          faint: "#94A3B8",
+          DEFAULT: "rgb(var(--ink) / <alpha-value>)",
+          soft: "rgb(var(--ink-soft) / <alpha-value>)",
+          muted: "rgb(var(--ink-muted) / <alpha-value>)",
+          subtle: "rgb(var(--ink-subtle) / <alpha-value>)",
+          faint: "rgb(var(--ink-faint) / <alpha-value>)",
         },
         surface: {
-          DEFAULT: "#FFFFFF",
-          page: "#F7F9FC",
-          subtle: "#F1F5F9",
-          border: "#E2E8F0",
-          divider: "#EEF2F7",
+          DEFAULT: "rgb(var(--surface) / <alpha-value>)",
+          page: "rgb(var(--surface-page) / <alpha-value>)",
+          subtle: "rgb(var(--surface-subtle) / <alpha-value>)",
+          border: "rgb(var(--surface-border) / <alpha-value>)",
+          divider: "rgb(var(--surface-divider) / <alpha-value>)",
         },
         sidebar: {
           DEFAULT: "#0B1220",

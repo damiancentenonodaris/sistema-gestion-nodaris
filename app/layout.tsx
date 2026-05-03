@@ -8,9 +8,25 @@ export const metadata: Metadata = {
   icons: { icon: "/favicon.svg" },
 };
 
+// Aplica el tema antes del primer paint para evitar flash claro.
+const themeInitScript = `
+(function() {
+  try {
+    var stored = localStorage.getItem('nodaris-theme');
+    var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    if (stored === 'dark' || (!stored && prefersDark)) {
+      document.documentElement.classList.add('dark');
+    }
+  } catch (e) {}
+})();
+`;
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="es">
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
+      </head>
       <body>{children}</body>
     </html>
   );

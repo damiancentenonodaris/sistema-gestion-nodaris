@@ -5,11 +5,38 @@
 @import url("https://rsms.me/inter/inter.css");
 
 :root {
+  /* Tokens en RGB (sin coma) para que Tailwind aplique <alpha-value>. */
+  --ink: 15 23 42;
+  --ink-soft: 30 41 59;
+  --ink-muted: 71 85 105;
+  --ink-subtle: 100 116 139;
+  --ink-faint: 148 163 184;
+
+  --surface: 255 255 255;
+  --surface-page: 247 249 252;
+  --surface-subtle: 241 245 249;
+  --surface-border: 226 232 240;
+  --surface-divider: 238 242 247;
+
   --bg: #f7f9fc;
   --grid: rgba(15, 23, 42, 0.04);
 }
 
 .dark {
+  /* Texto: claro sobre fondo oscuro. */
+  --ink: 241 245 249;          /* slate-100 */
+  --ink-soft: 226 232 240;     /* slate-200 */
+  --ink-muted: 148 163 184;    /* slate-400 */
+  --ink-subtle: 148 163 184;   /* slate-400 */
+  --ink-faint: 100 116 139;    /* slate-500 */
+
+  /* Superficies: paleta nocturna alineada con el sidebar. */
+  --surface: 15 23 41;         /* #0F1729 — tarjetas */
+  --surface-page: 10 16 32;    /* #0A1020 — fondo */
+  --surface-subtle: 19 28 48;  /* #131C30 — superficies sutiles */
+  --surface-border: 30 41 59;  /* slate-800 */
+  --surface-divider: 26 37 64; /* alineado con sidebar-divider */
+
   --bg: #0a1020;
   --grid: rgba(148, 163, 184, 0.06);
 }
@@ -25,10 +52,6 @@
   body {
     @apply bg-surface-page text-ink;
     font-feature-settings: "cv11", "ss01", "ss03";
-  }
-
-  .dark body {
-    @apply bg-[#0a1020] text-slate-100;
   }
 
   ::selection {
@@ -59,6 +82,11 @@
     background-clip: padding-box;
     border: 2px solid transparent;
   }
+  .dark ::-webkit-scrollbar-thumb:hover {
+    background: #334155;
+    background-clip: padding-box;
+    border: 2px solid transparent;
+  }
 }
 
 @layer components {
@@ -82,21 +110,21 @@
   .focus-ring {
     @apply outline-none ring-0 focus-visible:ring-2 focus-visible:ring-brand-600/40 focus-visible:ring-offset-1 focus-visible:ring-offset-white transition;
   }
+  .dark .focus-ring {
+    @apply focus-visible:ring-offset-[#0a1020];
+  }
 
-  /* Tarjeta base */
+  /* Tarjeta base — usa tokens, se adapta solo */
   .card-base {
     @apply rounded-2xl border border-surface-border bg-surface shadow-soft;
   }
   .dark .card-base {
-    @apply border-slate-800 bg-[#0f1729] shadow-none;
+    @apply shadow-none;
   }
 
   /* Texto secundario */
   .text-muted {
     @apply text-ink-subtle;
-  }
-  .dark .text-muted {
-    @apply text-slate-400;
   }
 }
 
