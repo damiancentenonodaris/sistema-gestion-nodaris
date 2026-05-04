@@ -159,6 +159,8 @@ interface NodarisState {
 
   updateLeadEstado: (id: string, estado: Lead["estado"]) => Promise<void>;
   removeLead: (id: string) => Promise<void>;
+  addLead: (data: Omit<Lead, "id" | "creado">) => Promise<Lead | null>;
+  addLeadsBulk: (data: Omit<Lead, "id" | "creado">[]) => Promise<{ inserted: number; errors: string[] }>;
 }
 
 let initialDataPromise: Promise<void> | null = null;
@@ -395,5 +397,31 @@ export const useNodaris = create<NodarisState>((set) => ({
     const supabase = createClient();
     await supabase.from("leads").delete().eq("id", id);
     set((s) => ({ leads: s.leads.filter((l) => l.id !== id) }));
+  },
+  addLead: async (data) => {
+    const supabase = createClient();
+    const payload = { ...data, creado: new Date().toISOString() };
+    const { data: res, error } = await supabase.from("leads").insert(payload).select().single();
+    if (error) {
+      console.error("[addLead]", error);
+      return null;
+    }
+    const lead = res as Lead;
+    set((s) => ({ leads: [lead, ...s.leads] }));
+    return lead;
+  },
+  addLeadsBulk: async (rows) => {
+    const supabase = createClient();
+    const errors: string[] = [];
+    if (rows.length === 0) return { inserted: 0, errors };
+    const payload = rows.map((r) => ({ ...r, creado: new Date().toISOString() }));
+    const { data, error } = await supabase.from("leads").insert(payload).select();
+    if (error) {
+      errors.push(error.message);
+      return { inserted: 0, errors };
+    }
+    const inserted = (data as Lead[]) || [];
+    set((s) => ({ leads: [...inserted, ...s.leads] }));
+    return { inserted: inserted.length, errors };
   },
 }));

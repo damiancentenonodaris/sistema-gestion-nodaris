@@ -5,6 +5,7 @@
 @import url("https://rsms.me/inter/inter.css");
 
 :root {
+  color-scheme: light;
   /* Tokens en RGB (sin coma) para que Tailwind aplique <alpha-value>. */
   --ink: 15 23 42;
   --ink-soft: 30 41 59;
@@ -23,6 +24,8 @@
 }
 
 .dark {
+  /* Avisa al navegador que los controles nativos (select, date, scrollbar) van en oscuro. */
+  color-scheme: dark;
   /* Texto: claro sobre fondo oscuro. */
   --ink: 241 245 249;          /* slate-100 */
   --ink-soft: 226 232 240;     /* slate-200 */
@@ -86,6 +89,14 @@
     background: #334155;
     background-clip: padding-box;
     border: 2px solid transparent;
+  }
+
+  /* Selects nativos en oscuro: el listado desplegable usa color-scheme,
+     pero forzamos también el color de fondo y texto por compatibilidad. */
+  .dark select,
+  .dark option {
+    background-color: #0f1729;
+    color: #f1f5f9;
   }
 }
 

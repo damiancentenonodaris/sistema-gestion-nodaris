@@ -10,6 +10,8 @@ import {
   Mail,
   Phone,
   ChevronDown,
+  Plus,
+  Upload,
 } from "lucide-react";
 import { AppShell } from "@/components/shell/AppShell";
 import { Header } from "@/components/shell/Header";
@@ -17,6 +19,8 @@ import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { EmptyState } from "@/components/ui/EmptyState";
+import { LeadModal } from "./LeadModal";
+import { LeadsImportModal } from "./LeadsImportModal";
 import { useNodaris } from "@/lib/store";
 import type { Lead, EstadoLead } from "@/types";
 
@@ -105,6 +109,8 @@ export function LeadsView() {
 
   const [refreshing, setRefreshing] = React.useState(false);
   const [expandedId, setExpandedId] = React.useState<string | null>(null);
+  const [newOpen, setNewOpen] = React.useState(false);
+  const [importOpen, setImportOpen] = React.useState(false);
 
   const leadsNuevos = leads.filter((l) => l.estado === "nuevo").length;
 
@@ -129,22 +135,40 @@ export function LeadsView() {
             : `${leads.length} lead${leads.length !== 1 ? "s" : ""} recibido${leads.length !== 1 ? "s" : ""}${leadsNuevos > 0 ? ` · ${leadsNuevos} nuevo${leadsNuevos !== 1 ? "s" : ""}` : ""}`
         }
         action={{
-          label: refreshing ? "Actualizando…" : "Actualizar",
-          onClick: handleRefresh,
+          label: "Nuevo lead",
+          onClick: () => setNewOpen(true),
         }}
       />
+
+      {/* Toolbar secundaria */}
+      <div className="px-6 pt-4 flex flex-wrap items-center gap-2">
+        <Button variant="ghost" onClick={() => setImportOpen(true)}>
+          <Upload size={14} className="mr-2" />
+          Importar CSV
+        </Button>
+        <Button variant="ghost" onClick={handleRefresh} disabled={refreshing}>
+          <RefreshCw size={14} className={`mr-2 ${refreshing ? "animate-spin" : ""}`} />
+          {refreshing ? "Actualizando…" : "Actualizar"}
+        </Button>
+      </div>
 
       <div className="px-6 py-6">
         {leads.length === 0 ? (
           <EmptyState
             icon={<Inbox size={20} />}
             title="Sin leads aún"
-            description="Cuando alguien complete el formulario de la landing, los leads aparecerán aquí automáticamente vía n8n."
+            description="Cargá un lead a mano, importá un CSV, o esperá a que lleguen desde la landing vía n8n."
             action={
-              <Button variant="ghost" onClick={handleRefresh}>
-                <RefreshCw size={14} className="mr-2" />
-                Actualizar
-              </Button>
+              <div className="flex flex-wrap items-center justify-center gap-2">
+                <Button onClick={() => setNewOpen(true)}>
+                  <Plus size={14} className="mr-2" />
+                  Nuevo lead
+                </Button>
+                <Button variant="ghost" onClick={() => setImportOpen(true)}>
+                  <Upload size={14} className="mr-2" />
+                  Importar CSV
+                </Button>
+              </div>
             }
           />
         ) : (
@@ -280,6 +304,9 @@ export function LeadsView() {
           })}
         </div>
       )}
+
+      <LeadModal open={newOpen} onClose={() => setNewOpen(false)} />
+      <LeadsImportModal open={importOpen} onClose={() => setImportOpen(false)} />
     </AppShell>
   );
 }
